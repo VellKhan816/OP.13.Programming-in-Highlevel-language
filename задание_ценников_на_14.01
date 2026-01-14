@@ -1,0 +1,70 @@
+import sys
+from PyQt6.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QLabel, QLineEdit, QPushButton, QMessageBox
+)
+from PyQt6.QtCore import Qt
+
+
+class DiscountCalculator(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Калькулятор скидок")
+        self.setGeometry(300, 300, 400, 200)
+
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+
+        main_layout = QVBoxLayout()
+
+        # Цена
+        price_layout = QHBoxLayout()
+        price_label = QLabel("Цена:")
+        self.price_input = QLineEdit()
+        self.price_input.setPlaceholderText("Введите цену")
+        price_layout.addWidget(price_label)
+        price_layout.addWidget(self.price_input)
+        main_layout.addLayout(price_layout)
+
+        # Скидка %
+        discount_layout = QHBoxLayout()
+        discount_label = QLabel("Скидка %:")
+        self.discount_input = QLineEdit()
+        self.discount_input.setPlaceholderText("Введите скидку")
+        discount_layout.addWidget(discount_label)
+        discount_layout.addWidget(self.discount_input)
+        main_layout.addLayout(discount_layout)
+
+        # Кнопка
+        self.calculate_button = QPushButton("Рассчитать итоговую цену")
+        self.calculate_button.clicked.connect(self.calculate_discount)
+        main_layout.addWidget(self.calculate_button)
+
+        # Результат
+        self.result_label = QLabel("Итог. цена = ")
+        self.result_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.result_label.setStyleSheet("font-size: 16px; font-weight: bold;")
+        main_layout.addWidget(self.result_label)
+
+        central_widget.setLayout(main_layout)
+
+    def calculate_discount(self):
+        try:
+            price = float(self.price_input.text().strip())
+            discount_percent = float(self.discount_input.text().strip())
+
+            if price < 0 or discount_percent < 0 or discount_percent > 100:
+                raise ValueError("Цена и скидка должны быть в допустимых пределах.")
+
+            final_price = price - (price * discount_percent / 100)
+            self.result_label.setText(f"Итог. цена = {final_price:.2f}")
+
+        except ValueError as e:
+            QMessageBox.critical(self, "Ошибка", f"Некорректный ввод:\n{e}")
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = DiscountCalculator()
+    window.show()
+    sys.exit(app.exec())
