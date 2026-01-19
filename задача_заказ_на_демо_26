@@ -1,0 +1,65 @@
+import sys
+from PyQt6.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QLabel, QFrame
+from PyQt6.QtCore import Qt
+
+class OrderCard(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(800, 150)  # Размер под вашу карточку
+        self.setup_ui()
+
+    def setup_ui(self):
+        main_layout = QHBoxLayout()
+        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setSpacing(10)
+
+        left_frame = QFrame()
+        left_frame.setFrameShape(QFrame.Shape.Box)
+        left_frame.setLineWidth(2)
+        left_layout = QVBoxLayout()
+        left_layout.setContentsMargins(10, 10, 10, 10)
+        left_layout.setSpacing(5)
+
+        fields = [
+            "Артикул заказа",
+            "Статус заказа",
+            "Адрес пункта выдачи (текст)",
+            "Дата заказа"
+        ]
+
+        for text in fields:
+            lbl = QLabel(text)
+            lbl.setStyleSheet("font-weight: normal; font-size: 14px;")
+            left_layout.addWidget(lbl)
+
+        left_frame.setLayout(left_layout)
+
+        right_frame = QFrame()
+        right_frame.setFrameShape(QFrame.Shape.Box)
+        right_frame.setLineWidth(2)
+        right_layout = QVBoxLayout()
+        right_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        right_label = QLabel("Дата доставки")
+        right_label.setStyleSheet("""
+            QLabel {
+                font-weight: bold;
+                font-size: 14px;
+                text-align: center;
+                padding: 10px;
+            }
+        """)
+        right_layout.addWidget(right_label)
+        right_frame.setLayout(right_layout)
+        right_frame.setFixedWidth(150)  # Ширина правого блока
+
+        main_layout.addWidget(left_frame)
+        main_layout.addWidget(right_frame)
+
+        self.setLayout(main_layout)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = OrderCard()
+    window.setWindowTitle("Карточка заказа")
+    window.show()
+    sys.exit(app.exec())
