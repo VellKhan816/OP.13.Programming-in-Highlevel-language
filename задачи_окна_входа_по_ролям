@@ -1,0 +1,186 @@
+import sys
+from PyQt6.QtWidgets import *
+from PyQt6.QtCore import Qt
+
+class ClientWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Клиент")
+        self.resize(400, 200)
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel("<h2>Вы вошли как клиент</h2>"))
+
+        view_orders_btn = QPushButton("Просмотр заказов")
+        view_orders_btn.clicked.connect(self.view_orders)
+        layout.addWidget(view_orders_btn)
+
+        self.setLayout(layout)
+
+    def view_orders(self):
+        QMessageBox.information(self, "Заказы", "Здесь будет список ваших заказов.")
+
+
+class ManagerWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Менеджер")
+        self.resize(600, 400)
+
+        layout = QVBoxLayout()
+
+        self.table = QTableWidget()
+        self.table.setRowCount(3)
+        self.table.setColumnCount(3)
+        self.table.setHorizontalHeaderLabels(["Артикул", "Статус", "Дата"])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+
+        orders = [
+            ["ORD-1001", "В обработке", "2026-01-15"],
+            ["ORD-1002", "Доставлен", "2026-01-10"],
+            ["ORD-1003", "Отменён", "2026-01-18"]
+        ]
+        for row, data in enumerate(orders):
+            for col, value in enumerate(data):
+                self.table.setItem(row, col, QTableWidgetItem(value))
+
+        layout.addWidget(QLabel("<h2>Список заказов</h2>"))
+        layout.addWidget(self.table)
+
+        btn_layout = QHBoxLayout()
+        change_status_btn = QPushButton("Изменить статус")
+        refresh_btn = QPushButton("Обновить")
+
+        change_status_btn.clicked.connect(self.change_status)
+        refresh_btn.clicked.connect(self.refresh)
+
+        btn_layout.addWidget(change_status_btn)
+        btn_layout.addWidget(refresh_btn)
+        layout.addLayout(btn_layout)
+
+        self.setLayout(layout)
+
+    def change_status(self):
+        QMessageBox.information(self, "Статус", "Функция изменения статуса — в разработке.")
+
+    def refresh(self):
+        QMessageBox.information(self, "Обновление", "Данные обновлены.")
+
+
+class AdminWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Администратор")
+        self.resize(600, 400)
+
+        layout = QVBoxLayout()
+
+        self.table = QTableWidget()
+        self.table.setRowCount(3)
+        self.table.setColumnCount(3)
+        self.table.setHorizontalHeaderLabels(["ID", "Название", "Цена"])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+
+        products = [
+            ["1", "Умные часы X1", "9 990 ₽"],
+            ["2", "Микроволновка M-200", "4 499 ₽"],
+            ["3", "Наушники Pro", "2 500 ₽"]
+        ]
+        for row, data in enumerate(products):
+            for col, value in enumerate(data):
+                self.table.setItem(row, col, QTableWidgetItem(value))
+
+        layout.addWidget(QLabel("<h2>Список товаров</h2>"))
+        layout.addWidget(self.table)
+
+        btn_layout = QHBoxLayout()
+        add_btn = QPushButton("Добавить")
+        edit_btn = QPushButton("Изменить")
+        delete_btn = QPushButton("Удалить")
+
+        add_btn.clicked.connect(self.add_product)
+        edit_btn.clicked.connect(self.edit_product)
+        delete_btn.clicked.connect(self.delete_product)
+
+        btn_layout.addWidget(add_btn)
+        btn_layout.addWidget(edit_btn)
+        btn_layout.addWidget(delete_btn)
+        layout.addLayout(btn_layout)
+
+        self.setLayout(layout)
+
+    def add_product(self):
+        QMessageBox.information(self, "Добавление", "Форма добавления товара — в разработке.")
+
+    def edit_product(self):
+        QMessageBox.information(self, "Изменение", "Выберите товар для редактирования.")
+
+    def delete_product(self):
+        QMessageBox.information(self, "Удаление", "Товар будет удалён после подтверждения.")
+
+class LoginWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Вход в систему")
+        self.setFixedSize(320, 250)
+        self.setup_ui()
+
+    def setup_ui(self):
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.setSpacing(15)
+
+        title = QLabel("Авторизация")
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setStyleSheet("font-size: 18px; font-weight: bold;")
+        layout.addWidget(title)
+
+        role_layout = QHBoxLayout()
+        role_label = QLabel("Роль:")
+        self.role_combo = QComboBox()
+        self.role_combo.addItems(["Админ", "Менеджер", "Клиент"])
+        role_layout.addWidget(role_label)
+        role_layout.addWidget(self.role_combo)
+        layout.addLayout(role_layout)
+
+        self.login_input = QLineEdit()
+        self.login_input.setPlaceholderText("Логин")
+        self.login_input.setFixedWidth(220)
+        layout.addWidget(self.login_input, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        self.password_input = QLineEdit()
+        self.password_input.setPlaceholderText("Пароль")
+        self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
+        self.password_input.setFixedWidth(220)
+        layout.addWidget(self.password_input, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        login_button = QPushButton("ВОЙТИ")
+        login_button.setFixedWidth(220)
+        login_button.clicked.connect(self.check_login)
+        layout.addWidget(login_button, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        self.setLayout(layout)
+
+    def check_login(self):
+        role = self.role_combo.currentText()
+        login = self.login_input.text().strip()
+        password = self.password_input.text().strip()
+
+        if role == "Админ" and login == "admin" and password == "admin123":
+            self.open_window(AdminWindow())
+        elif role == "Менеджер" and login == "manager" and password == "manager123":
+            self.open_window(ManagerWindow())
+        elif role == "Клиент" and login == "client" and password == "client123":
+            self.open_window(ClientWindow())
+        else:
+            QMessageBox.critical(self, "Ошибка", "Неверный логин или пароль")
+
+    def open_window(self, window):
+        self.hide()
+        window.show()
+        self.opened_window = window
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    login_window = LoginWindow()
+    login_window.show()
+    sys.exit(app.exec())
