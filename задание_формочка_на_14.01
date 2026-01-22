@@ -1,103 +1,68 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame
+from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 
 class ProductCard(QWidget):
     def __init__(self):
         super().__init__()
         self.setFixedHeight(280)
+        self.setStyleSheet("font-weight: bold;")  # общий стиль для всех надписей
         self.setup_ui()
 
     def setup_ui(self):
-        main_layout = QHBoxLayout()
-        main_layout.setContentsMargins(5, 5, 5, 5)
-        main_layout.setSpacing(10)
+        layout = QHBoxLayout()
+        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setSpacing(10)
 
-        photo_frame = QFrame()
-        photo_frame.setFrameShape(QFrame.Shape.Box)
-        photo_frame.setLineWidth(2)
-        photo_label = QLabel("Фото")
-        photo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        photo_label.setStyleSheet("""
-            QLabel {
-                border: 2px solid black;
-                padding: 10px;
-                font-weight: bold;
-                font-size: 14px;
-            }
+        # --- Левая колонка: "Фото" ---
+        photo = QLabel("Фото")
+        photo.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        photo.setFixedSize(200, 200)
+        photo.setStyleSheet("""
+            border: 2px solid black;
+            padding: 10px;
+            font-size: 14px;
+            background-color: #f0f0f0;
         """)
-        photo_label.setFixedSize(200, 200)
 
-        photo_layout = QVBoxLayout()
-        photo_layout.addWidget(photo_label)
-        photo_frame.setLayout(photo_layout)
+        # --- Центральная колонка: Информация ---
+        info = QLabel(
+            "Электроника | Умные часы X1\n"
+            "Описание товара: Сердечный ритм, GPS, водонепроницаемость\n"
+            "Производитель: TechCorp\n"
+            "Поставщик: ГлобалТрейд\n"
+            "Цена: 9 990 ₽\n"
+            "Единица измерения: шт.\n"
+            "Количество на складе: 15"
+        )
+        info.setFrameShape(QFrame.Shape.Box)
+        info.setFrameShadow(QFrame.Shadow.Plain)
+        info.setLineWidth(2)
+        info.setContentsMargins(10, 10, 10, 10)
+        info.setMinimumWidth(400)  # чтобы не сжималось
 
-        info_frame = QFrame()
-        info_frame.setFrameShape(QFrame.Shape.Box)
-        info_frame.setLineWidth(2)
-        info_layout = QVBoxLayout()
-        info_layout.setSpacing(3)
-        info_layout.setContentsMargins(10, 10, 10, 10)
-
-        title = QLabel("Электроника | Умные часы X1")
-        title.setStyleSheet("font-weight: bold; font-size: 16px;")
-        info_layout.addWidget(title)
-
-        desc = QLabel("Описание товара: Сердечный ритм, GPS, водонепроницаемость")
-        desc.setStyleSheet("font-weight: bold;")
-        info_layout.addWidget(desc)
-
-        manufacturer = QLabel("Производитель: TechCorp")
-        manufacturer.setStyleSheet("font-weight: bold;")
-        info_layout.addWidget(manufacturer)
-
-        supplier = QLabel("Поставщик: ГлобалТрейд")
-        supplier.setStyleSheet("font-weight: bold;")
-        info_layout.addWidget(supplier)
-
-        price = QLabel("Цена: 9 990 ₽")
-        price.setStyleSheet("font-weight: bold;")
-        info_layout.addWidget(price)
-
-        unit = QLabel("Единица измерения: шт.")
-        unit.setStyleSheet("font-weight: bold;")
-        info_layout.addWidget(unit)
-
-        stock = QLabel("Количество на складе: 15")
-        stock.setStyleSheet("font-weight: bold;")
-        info_layout.addWidget(stock)
-
-        info_frame.setLayout(info_layout)
-
-        discount_frame = QFrame()
-        discount_frame.setFrameShape(QFrame.Shape.Box)
-        discount_frame.setLineWidth(2)
-        discount_label = QLabel("Персональная\nскидка: 15%")
-        discount_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        discount_label.setStyleSheet("""
-            QLabel {
-                border: 2px solid black;
-                padding: 10px;
-                font-weight: bold;
-                font-size: 14px;
-                text-align: center;
-            }
+        # --- Правая колонка: Скидка ---
+        discount = QLabel("Персональная\nскидка: 15%")
+        discount.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        discount.setFixedSize(120, 200)
+        discount.setStyleSheet("""
+            border: 2px solid black;
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
         """)
-        discount_label.setFixedSize(120, 200)
 
-        discount_layout = QVBoxLayout()
-        discount_layout.addWidget(discount_label)
-        discount_frame.setLayout(discount_layout)
+        # Добавляем всё в основной макет
+        layout.addWidget(photo)
+        layout.addWidget(info)
+        layout.addWidget(discount)
 
-        main_layout.addWidget(photo_frame)
-        main_layout.addWidget(info_frame)
-        main_layout.addWidget(discount_frame)
+        self.setLayout(layout)
 
-        self.setLayout(main_layout)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = ProductCard()  # Только одна карточка!
+    window = ProductCard()
     window.setWindowTitle("Карточка товара")
     window.resize(800, 300)
     window.show()
