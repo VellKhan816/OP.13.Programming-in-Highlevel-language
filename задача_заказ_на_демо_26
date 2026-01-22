@@ -5,7 +5,8 @@ from PyQt6.QtCore import Qt
 class OrderCard(QWidget):
     def __init__(self):
         super().__init__()
-        self.setFixedSize(800, 150)  # Размер под вашу карточку
+        self.setWindowTitle("Карточка заказа")
+        self.setFixedSize(800, 150)
         self.setup_ui()
 
     def setup_ui(self):
@@ -60,6 +61,5 @@ class OrderCard(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = OrderCard()
-    window.setWindowTitle("Карточка заказа")
     window.show()
     sys.exit(app.exec())
