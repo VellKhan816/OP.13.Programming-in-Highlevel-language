@@ -5,7 +5,6 @@ from PyQt6.QtCore import Qt
 class ProductCard(QWidget):
     def __init__(self):
         super().__init__()
-        self.setFixedHeight(260)
         self.setWindowTitle("Карточка товара")
         self.resize(800, 300)
         self.setup_ui()
@@ -38,12 +37,12 @@ class ProductCard(QWidget):
         info.setFrameShadow(QFrame.Shadow.Plain)
         info.setLineWidth(2)
         info.setContentsMargins(10, 10, 10, 10)
-        info.setMinimumWidth(300)
+        info.setMinimumWidth(200)
 
         # --- Правая колонка: Скидка ---
         discount = QLabel("Персональная\nскидка: 15%")
         discount.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        discount.setFixedSize(120, 200)
+        discount.setFixedSize(150, 200)
         discount.setStyleSheet("""
             border: 2px solid black;
             padding: 10px;
